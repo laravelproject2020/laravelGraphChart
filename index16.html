@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pie Charts with Carousel</title>
+    <!-- Include Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Include Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Include jQuery and Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <style>
+        .pie-chart-container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+        }
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+        .carousel-item {
+            text-align: center;
+        }
+        #chart-title {
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        #subtitle {
+            font-size: 16px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .carousel-indicators {
+            bottom: -40px;
+        }
+    </style>
+</head>
+<body>
+    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <div class="pie-chart-container">
+                    <canvas id="myCanvas1" width="400" height="400"></canvas>
+                    <div class="chart-label">76%</div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="pie-chart-container">
+                    <canvas id="myCanvas2" width="400" height="400"></canvas>
+                    <div class="chart-label">78%</div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="pie-chart-container">
+                    <canvas id="myCanvas3" width="400" height="400"></canvas>
+                    <div class="chart-label">87%</div>
+                </div>
+            </div>
+        </div>
+        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+        <ol class="carousel-indicators">
+            <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+        </ol>
+    </div>
+
+    <script>
+        const colors = ['#ff6384', '#36a2eb', '#ffce56']; // Adjust colors based on your data
+        const data = [76, 78, 87]; // Adjust data values based on your data
+
+        function drawPieChart(canvasId, percentage) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const radius = Math.min(centerX, centerY);
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const sliceAngle = (2 * Math.PI * percentage) / 100;
+            const startAngle = -0.5 * Math.PI;
+            const endAngle = startAngle + sliceAngle;
+
+            // Draw pie slice
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+            ctx.fillStyle = colors[0]; // Change color as needed
+            ctx.fill();
+
+            // Draw inner circle
+            const innerRadius = radius * 0.6;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, innerRadius, 0, 2 * Math.PI);
+            ctx.fillStyle = '#fff'; // Change color as needed
+            ctx.fill();
+
+            // Draw percentage text
+            ctx.font = 'bold 30px Arial';
+            ctx.fillStyle = '#000'; // Change color as needed
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(percentage + '%', centerX, centerY);
+        }
+
+        function updatePieChart(index) {
+            drawPieChart(`myCanvas${index + 1}`, data[index]);
+            document.querySelector(`.chart-label`).innerText = data[index] + '%';
+        }
+
+        updatePieChart(0); // Draw initial chart
+
+        // Handle carousel slide event
+        $('#carouselExampleIndicators').on('slide.bs.carousel', function (e) {
+            const slideIndex = e.to;
+            updatePieChart(slideIndex);
+        });
+    </script>
+</body>
+</html>

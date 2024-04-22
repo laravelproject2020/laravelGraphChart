@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Line Chart with Toggling Data</title>
+    <!-- Include Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <canvas id="myChart" width="400" height="400"></canvas>
+    <br>
+    <button onclick="showDataset(0)">Point 1</button>
+    <button onclick="showDataset(1)">Point 2</button>
+    <button onclick="resetChart()">Reset</button>
+
+    <script>
+        var ctx = document.getElementById("myChart").getContext("2d");
+
+        var myChart = new Chart(ctx, {
+            type: "line",
+            data: {
+                labels: ["15 April", "16 April", "17 April", "18 April", "19 April", "20 April", "21 April"],
+                datasets: [
+                    {
+                        label: "Point 1",
+                        data: [250, 375, 400, 425, 450, 475, 500],
+                        borderWidth: 1,
+                        borderColor: 'maroon',
+                        backgroundColor: 'rgba(176, 58, 46, 0.2)', // Maroon background color
+                        fill: 'origin', // Fill area below the dataset
+                        hidden: false // Initially visible
+                    },
+                    {
+                        label: "Point 2",
+                        data: [250, 475, 450, 425, 400, 375, 500],
+                        borderWidth: 1,
+                        borderColor: 'blue',
+                        backgroundColor: 'rgba(46, 73, 176, 0.2)', // Blue background color
+                        fill: 'origin', // Fill area below the dataset
+                        hidden: false // Initially visible
+                    }
+                ]
+            },
+            options: {
+                responsive: false,
+                layout: {
+                    padding: {
+                        left: 50,
+                        right: 0,
+                        top: 50,
+                        bottom: 0
+                    }
+                },
+                tooltips: {
+                    enabled: true,
+                    backgroundColor: "green",
+                    titleFontFamily: "Comic Sans MS",
+                    titleFontSize: 30,
+                    titleFontStyle: "bold italic",
+                    titleFontColor: "yellow",
+                    titleAlign: "center",
+                    titleSpacing: 3,
+                    titleMarginBottom: 50,
+                    bodyFontFamily: "Comic Sans MS",
+                    bodyFontSize: 20,
+                    bodyFontStyle: "italic",
+                    bodyFontColor: "black",
+                    bodyAlign: "center",
+                    bodySpacing: 3
+                },
+                title: {
+                    display: true,
+                    text: "Custom Chart Title",
+                    fontSize: 25,
+                    position: "bottom",
+                    fontFamily: "Comic Sans MS",
+                    fontColor: "red",
+                    fontStyle: "bold italic",
+                    padding: 20,
+                    lineHeight: 5
+                },
+                legend: {
+                    display: true,
+                    position: "bottom",
+                    align: "end",
+                    labels: {
+                        fontSize: 16,
+                        fontColor: "red",
+                        boxWidth: 20
+                    }
+                }
+            }
+        });
+
+        function showDataset(datasetIndex) {
+            // Hide all datasets
+            for (var i = 0; i < myChart.data.datasets.length; i++) {
+                myChart.data.datasets[i].hidden = true;
+            }
+            // Show the selected dataset
+            myChart.data.datasets[datasetIndex].hidden = false;
+            myChart.update();
+        }
+
+        function resetChart() {
+            // Show all datasets
+            for (var i = 0; i < myChart.data.datasets.length; i++) {
+                myChart.data.datasets[i].hidden = false;
+            }
+            myChart.update();
+        }
+    </script>
+</body>
+</html>
